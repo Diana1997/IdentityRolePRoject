@@ -133,12 +133,15 @@ namespace IdentityRolePRoject.Controllers
                     return View(model);
             }
         }
-
+        private ApplicationDbContext db = new ApplicationDbContext();
         //
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
         {
+            //   ViewBag.RoleList = db.Roles.ToList();
+            ViewBag.Name = new SelectList(db.Roles.Where(u => !u.Name.Contains("Admin"))
+                                               .ToList(), "Name", "Name");
             return View();
         }
 
@@ -155,16 +158,26 @@ namespace IdentityRolePRoject.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var currentUser = UserManager.FindByName(user.UserName);
+                    //var rolesList = UserManager.AddToRole(currentUser.Id, "manager");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
+                    await this.UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+
+
+                    //ViewBag.RoleList = db.Roles.ToList();
                     return RedirectToAction("Index", "Home");
                 }
+
+                ViewBag.Name = new SelectList(db.Roles.Where(u => !u.Name.Contains("Admin"))
+                                      .ToList(), "Name", "Name");
                 AddErrors(result);
             }
 

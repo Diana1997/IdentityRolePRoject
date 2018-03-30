@@ -4,9 +4,11 @@
 
 <h2>Index</h2>
 <p>
-	@Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create")
 </p>
+<select name="Role">
 @foreach (var item in ViewBag.list)
 {
-	@item.Name
+    <option value="@item.Id" > @item.Name</option>
 }
+</select>
