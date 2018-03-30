@@ -17,7 +17,10 @@ namespace IdentityRolePRoject.Controllers
         // GET: Role
         public ActionResult Index()
         {
-            return View(db.Roles.ToList());
+            //var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+            //var d = roleManager.Roles;
+              ViewBag.list = db.Roles.ToList();
+            return View();
         }
 
         public ActionResult Create()

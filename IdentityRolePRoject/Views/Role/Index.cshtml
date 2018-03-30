@@ -1,5 +1,4 @@
-﻿@model IEnumerable<IdentityRolePRoject.Models.RoleViewModel>
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 
@@ -7,3 +6,7 @@
 <p>
 	@Html.ActionLink("Create New", "Create")
 </p>
+@foreach (var item in ViewBag.list)
+{
+	@item.Name
+}
